@@ -23,6 +23,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.13.9",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
@@ -37,6 +38,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.12.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "uuidv4": "^6.2.13"
   }
 }
