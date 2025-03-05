@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import { DB_URI } from '../../constants/secrets';
+import mongoose from 'mongoose';
 
 const connectDB = () => {
   mongoose
