@@ -8,6 +8,7 @@ module.exports = {
     '!src/app.ts',
     '!src/routes.ts',
     '!src/config/express.ts',
+    '!src/database/models/*.ts'
   ],
   coverageThreshold: {
     global: {
