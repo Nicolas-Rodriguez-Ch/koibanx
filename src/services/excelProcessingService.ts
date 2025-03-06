@@ -33,7 +33,15 @@ export const processExcelFile = async (taskId: string): Promise<void> => {
 
     const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[][];
 
-    const rows = data.slice(1);
+    const rows = data.slice(1).filter((row) => {
+      return (
+        row.length > 0 &&
+        row.some(
+          (cell) =>
+            cell !== null && cell !== undefined && String(cell).trim() !== ''
+        )
+      );
+    });
     task.totalRows = rows.length;
     await task.save();
 

@@ -4,7 +4,7 @@ import task from './api/task';
 
 const routes = (app: Application): void => {
   app.use('/api/healthcheck', healthCheck);
-  app.use('/api/task', task);
+  app.use('/api/tasks', task);
 };
 
 export default routes;
