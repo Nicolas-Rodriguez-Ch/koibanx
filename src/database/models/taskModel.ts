@@ -12,7 +12,7 @@ export interface IError {
   message?: string;
 }
 
-export interface ITask extends Omit<Document, 'errors'> {
+export interface ITask {
   originalFileName: string;
   status: TaskStatus;
   totalRows: number;

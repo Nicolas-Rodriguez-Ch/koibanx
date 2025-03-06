@@ -2,8 +2,7 @@ import {
   parseAndSortNums,
   getMappingStrategy,
   MappingStrategies,
-  createMappingStrategy,
-} from '../../../src/services/mapping/mappingStrategy';
+} from '../../src/services/mappingStrategy';
 
 describe('parseAndSortNums', () => {
   it('should parse and sort a comma-separated list of numbers', () => {
@@ -150,5 +149,3 @@ describe('getMappingStrategy', () => {
     expect(strategy).toBe(MappingStrategies.default);
   });
 });
-
-
