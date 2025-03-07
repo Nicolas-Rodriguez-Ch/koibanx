@@ -2,11 +2,19 @@ import { Request } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+
+const uploadDir = path.resolve(process.cwd(), 'uploads');
+
+/* istanbul ignore next */
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 /* istanbul ignore next */
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../../uploads'));
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = `${uuidv4()}${path.extname(file.originalname)}`;
@@ -38,4 +46,4 @@ const upload = multer({
   },
 });
 
-export { storage, fileFilter, upload };
+export { storage, fileFilter, upload, uploadDir };

@@ -4,6 +4,7 @@ import { ProcessedData } from '../database/models/processDataModel';
 import { getMappingStrategy } from './mappingStrategy';
 import fs from 'fs';
 import path from 'path';
+import { uploadDir } from '../middleware/fileUploadService';
 
 export const processExcelFile = async (taskId: string): Promise<void> => {
   const task = await Task.findById(taskId).exec();
@@ -16,11 +17,7 @@ export const processExcelFile = async (taskId: string): Promise<void> => {
     task.status = TaskStatus.PROCESSING;
     await task.save();
 
-    const pathFile = path.join(
-      __dirname,
-      '../../uploads',
-      task.originalFileName
-    );
+    const pathFile = path.join(uploadDir, task.originalFileName);
 
     const woorkbook = XLSX.readFile(pathFile, {
       cellDates: true,

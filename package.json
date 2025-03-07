@@ -4,7 +4,7 @@
   "main": "./src/app.ts",
   "scripts": {
     "dev": "ts-node-dev --transpile-only --respawn --exit-child ./src/app.ts",
-    "build": "tsc",
+    "build": "tsc && npx mkdirp dist/uploads",
     "start": "node ./dist/src/app.js",
     "test": "jest",
     "test:watch": "jest --watch",
