@@ -7,6 +7,14 @@ import taskRoutes from '../../../src/api/task';
 import { queueProcessingTask } from '../../../src/services/excelProcessingService';
 import { Readable } from 'stream';
 
+const TEST_READ_KEY = 'read-api-key';
+const TEST_WRITE_KEY = 'write-api-key';
+
+jest.mock('../../../src/middleware/apiPermissionMiddleware', () => ({
+  requireReadPermission: jest.fn((req, res, next) => next()),
+  requireWritePermission: jest.fn((req, res, next) => next())
+}));
+
 jest.mock('../../../src/middleware/fileUploadService', () => ({
   upload: {
     single: jest
@@ -90,6 +98,7 @@ describe('Task API Routes', () => {
 
       const response = await request(testApp)
         .post('/api/task/upload')
+        .set('X-API-KEY', TEST_WRITE_KEY)
         .field('mappingFormat', 'default');
 
       expect(response.status).toBe(400);
@@ -99,6 +108,7 @@ describe('Task API Routes', () => {
     it('should create a new task and queue processing', async () => {
       const response = await request(app)
         .post('/api/task/upload')
+        .set('X-API-KEY', TEST_WRITE_KEY)
         .field('mappingFormat', 'default')
         .attach('file', Buffer.from('test'), 'test-file.xlsx');
 
@@ -119,6 +129,7 @@ describe('Task API Routes', () => {
 
       const response = await request(app)
         .post('/api/task/upload')
+        .set('X-API-KEY', TEST_WRITE_KEY)
         .field('mappingFormat', 'default')
         .attach('file', Buffer.from('test'), 'test-file.xlsx');
 
@@ -140,7 +151,9 @@ describe('Task API Routes', () => {
         errors: [{ row: 1, col: 2 }],
       });
 
-      const response = await request(app).get(`/api/task/${task._id}/status`);
+      const response = await request(app)
+        .get(`/api/task/${task._id}/status`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -152,16 +165,18 @@ describe('Task API Routes', () => {
     });
 
     it('should handle empty taskId parameter', async () => {
-      const response = await request(app).get('/api/task/undefined/status');
+      const response = await request(app)
+        .get('/api/task/undefined/status')
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(500);
     });
 
     it('should return 404 if task is not found', async () => {
       const nonExistentId = new mongoose.Types.ObjectId();
-      const response = await request(app).get(
-        `/api/task/${nonExistentId}/status`
-      );
+      const response = await request(app)
+        .get(`/api/task/${nonExistentId}/status`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toContain('Task not found');
@@ -179,7 +194,9 @@ describe('Task API Routes', () => {
         .fn()
         .mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).get(`/api/task/${task._id}/status`);
+      const response = await request(app)
+        .get(`/api/task/${task._id}/status`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(500);
       expect(response.body.message).toBe('Error getting task status');
@@ -203,9 +220,9 @@ describe('Task API Routes', () => {
         errors,
       });
 
-      const response = await request(app).get(
-        `/api/task/${task._id}/errors?page=2&limit=10`
-      );
+      const response = await request(app)
+        .get(`/api/task/${task._id}/errors?page=2&limit=10`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(200);
       expect(response.body.errors.length).toBe(10);
@@ -218,16 +235,18 @@ describe('Task API Routes', () => {
     });
 
     it('should handle empty taskId parameter', async () => {
-      const response = await request(app).get('/api/task/undefined/errors');
+      const response = await request(app)
+        .get('/api/task/undefined/errors')
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(500);
     });
 
     it('should return 404 if task is not found', async () => {
       const nonExistentId = new mongoose.Types.ObjectId();
-      const response = await request(app).get(
-        `/api/task/${nonExistentId}/errors`
-      );
+      const response = await request(app)
+        .get(`/api/task/${nonExistentId}/errors`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toContain('Task not found');
@@ -245,7 +264,9 @@ describe('Task API Routes', () => {
         .fn()
         .mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).get(`/api/task/${task._id}/errors`);
+      const response = await request(app)
+        .get(`/api/task/${task._id}/errors`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(500);
       expect(response.body.message).toBe('Error getting task errors');
@@ -273,9 +294,9 @@ describe('Task API Routes', () => {
         data: sampleData,
       });
 
-      const response = await request(app).get(
-        `/api/task/${task._id}/data?page=2&limit=10`
-      );
+      const response = await request(app)
+        .get(`/api/task/${task._id}/data?page=2&limit=10`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(10);
@@ -288,16 +309,18 @@ describe('Task API Routes', () => {
     });
 
     it('should handle empty taskId parameter', async () => {
-      const response = await request(app).get('/api/task/undefined/data');
+      const response = await request(app)
+        .get('/api/task/undefined/data')
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(500);
     });
 
     it('should return 404 if task is not found', async () => {
       const nonExistentId = new mongoose.Types.ObjectId();
-      const response = await request(app).get(
-        `/api/task/${nonExistentId}/data`
-      );
+      const response = await request(app)
+        .get(`/api/task/${nonExistentId}/data`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toContain('Task not found');
@@ -310,7 +333,9 @@ describe('Task API Routes', () => {
         status: TaskStatus.PROCESSING,
       });
 
-      const response = await request(app).get(`/api/task/${task._id}/data`);
+      const response = await request(app)
+        .get(`/api/task/${task._id}/data`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain(
@@ -325,7 +350,9 @@ describe('Task API Routes', () => {
         status: TaskStatus.DONE,
       });
 
-      const response = await request(app).get(`/api/task/${task._id}/data`);
+      const response = await request(app)
+        .get(`/api/task/${task._id}/data`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toContain('Processed data not found');
@@ -343,7 +370,9 @@ describe('Task API Routes', () => {
         .fn()
         .mockRejectedValue(new Error('Database error'));
 
-      const response = await request(app).get(`/api/task/${task._id}/data`);
+      const response = await request(app)
+        .get(`/api/task/${task._id}/data`)
+        .set('X-API-KEY', TEST_READ_KEY);
 
       expect(response.status).toBe(500);
       expect(response.body.message).toBe('Error getting processed data');
