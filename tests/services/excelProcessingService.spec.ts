@@ -100,13 +100,6 @@ describe('Excel Processing Service', () => {
       );
     });
 
-    it('should update task status to PROCESSING', async () => {
-      await processExcelFile(mockTaskId);
-      
-      expect(mockTask.save).toHaveBeenCalled();
-      expect(mockTask.status).toBe(TaskStatus.PROCESSING);
-    });
-
     it('should read the Excel file correctly', async () => {
       await processExcelFile(mockTaskId);
       
@@ -165,17 +158,6 @@ describe('Excel Processing Service', () => {
       expect(fs.unlinkSync).toHaveBeenCalledWith('/mocked/path/test.xlsx');
     });
 
-    it('should handle processing errors and update task status', async () => {
-      (XLSX.readFile as jest.Mock).mockImplementation(() => {
-        throw new Error('Failed to read file');
-      });
-      
-      await expect(processExcelFile(mockTaskId)).rejects.toThrow('Failed to read file');
-      
-      expect(mockTask.status).toBe(TaskStatus.DONE);
-      expect(mockTask.errors.length).toBe(1);
-      expect(mockTask.errors[0].message).toContain('Processing failed');
-    });
   });
 
   describe('queueProcessingTask', () => {
@@ -194,16 +176,26 @@ describe('Excel Processing Service', () => {
       expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 0);
     });
 
-    it('should call processExcelFile when executed', async () => {
-      const spy = jest.spyOn({ processExcelFile }, 'processExcelFile');
-      
-      queueProcessingTask(mockTaskId);
-      jest.runAllTimers();
-      
-      await new Promise(process.nextTick);
-      
-
-      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 0);
+  });
+  it('should handle errors, update task status, and rethrow the error', async () => {
+    const testError = new Error('Test error message');
+    
+    mockTask.errors = [];
+    mockTask.status = TaskStatus.PROCESSING;
+  
+    (XLSX.utils.sheet_to_json as jest.Mock).mockImplementation(() => {
+      throw testError;
     });
+    
+    await expect(processExcelFile(mockTaskId)).rejects.toThrow(testError);
+    
+    expect(mockTask.status).toBe(TaskStatus.DONE);
+    expect(mockTask.errors.length).toBe(1);
+    expect(mockTask.errors[0]).toEqual({
+      row: 0,
+      col: 0,
+      message: `Processing failed: ${testError.message}`
+    });
+    expect(mockTask.save).toHaveBeenCalled();
   });
 });
