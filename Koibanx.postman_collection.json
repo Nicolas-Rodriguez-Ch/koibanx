@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "a7726484-0c6a-462c-b03f-b2a388ebd87e",
+		"name": "Koibanx",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13473689",
+		"_collection_link": "https://technotrovego-7132.postman.co/workspace/TechnoTroveGo-Workspace~2a7615bb-7af4-4c7c-8578-9ce7d14a24c9/collection/13473689-a7726484-0c6a-462c-b03f-b2a388ebd87e?action=share&source=collection_link&creator=13473689"
+	},
+	"item": [
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "PzQVUi9lwKhlfVqu0NMGxTA4zq3oVeNRtwOVLOELTdsdYtXoTFmTlKUBilD35hk81xQPiYXDBFyx9r8UyhHj5FTx130pfvVmGvfum2okrKvwt4YcTEGjrK9qe0uA6Mb1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/nicol/Downloads/koibanxTest.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/tasks/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"tasks",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get task by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "PzQVUi9lwKhlfVqu0NMGxTA4zq3oVeNRtwOVLOELTdsdYtXoTFmTlKUBilD35hk81xQPiYXDBFyx9r8UyhHj5FTx130pfvVmGvfum2okrKvwt4YcTEGjrK9qe0uA6Mb1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/tasks/67ca5a94e5fe29d4b332153c/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"tasks",
+								"67ca5a94e5fe29d4b332153c",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get data by task id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-KEY",
+								"value": "PzQVUi9lwKhlfVqu0NMGxTA4zq3oVeNRtwOVLOELTdsdYtXoTFmTlKUBilD35hk81xQPiYXDBFyx9r8UyhHj5FTx130pfvVmGvfum2okrKvwt4YcTEGjrK9qe0uA6Mb1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/tasks/67ca5a94e5fe29d4b332153c/data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"tasks",
+								"67ca5a94e5fe29d4b332153c",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Errors by task id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/tasks/67ca2b2d94f241d03e1bae09/errors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"tasks",
+								"67ca2b2d94f241d03e1bae09",
+								"errors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/healthcheck",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

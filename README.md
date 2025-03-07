@@ -13,7 +13,6 @@ A Node.js service for uploading Excel spreadsheets with format validation and as
 - Processes number fields with up to 5,000 numbers
 - Secure API with permission-based access
 
-
 ## Project Structure
 
 ```
@@ -33,6 +32,7 @@ root/
 ├── constants/                 # Environment constants
 ├── .env                       # Environment variables
 ├── .env.example               # Example environment variables
+├── Koibanx.postman_collection.json  # Postman collection for the API
 └── README.md                  # This file
 ```
 
@@ -85,6 +85,7 @@ X-API-KEY: your-api-key
 ```
 
 There are two permission levels:
+
 - **Read-only**: Can check status and retrieve data
 - **Admin**: Can upload files and perform all read operations
 
@@ -98,12 +99,14 @@ POST /api/task/upload
 
 **Permission Level**: Admin (write permission)
 
-**Request**:  
+**Request**:
+
 - Body: Form data with:
   - `file`: Excel file (`.xlsx`)
   - `mappingFormat`: Mapping format name (default: "default")
 
 **Response**:
+
 ```json
 {
   "taskId": "60a1b2c3d4e5f6a7b8c9d0e1",
@@ -120,9 +123,10 @@ GET /api/task/:taskId/status
 **Permission Level**: Read
 
 **Response**:
+
 ```json
 {
-  "status": "processing",  // "pending", "processing", or "done"
+  "status": "processing", // "pending", "processing", or "done"
   "totalRows": 1000,
   "processedRows": 750,
   "errors": 25
@@ -138,10 +142,12 @@ GET /api/task/:taskId/errors?page=1&limit=10
 **Permission Level**: Read
 
 **Query Parameters**:
+
 - `page`: Page number (default: 1)
 - `limit`: Items per page (default: 10)
 
 **Response**:
+
 ```json
 {
   "errors": [
@@ -166,10 +172,12 @@ GET /api/task/:taskId/data?page=1&limit=10
 **Permission Level**: Read
 
 **Query Parameters**:
+
 - `page`: Page number (default: 1)
 - `limit`: Items per page (default: 10)
 
 **Response**:
+
 ```json
 {
   "data": [
@@ -197,11 +205,13 @@ The API supports different mapping formats to transform Excel data into JSON. Th
 - Column 3: Nums (comma-separated numbers)
 
 For example, given a row:
+
 ```
 Esteban  30  3,8,1,9,100,34,78,32,97,12
 ```
 
 The resulting JSON would be:
+
 ```json
 {
   "name": "Esteban",
@@ -213,6 +223,7 @@ The resulting JSON would be:
 ## Error Handling
 
 The API validates data types strictly:
+
 - `name`: Must be a non-empty string
 - `age`: Must be a number between 0 and 150
 - `nums`: Must be parseable as numbers and will be sorted in ascending order
