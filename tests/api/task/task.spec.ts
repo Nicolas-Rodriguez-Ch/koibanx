@@ -7,7 +7,7 @@ import taskRoutes from '../../../src/api/task';
 import { queueProcessingTask } from '../../../src/services/excelProcessingService';
 import { Readable } from 'stream';
 
-jest.mock('../../../src/api/middleware/fileUploadService', () => ({
+jest.mock('../../../src/middleware/fileUploadService', () => ({
   upload: {
     single: jest
       .fn()
@@ -66,7 +66,7 @@ describe('Task API Routes', () => {
       jest.resetModules();
 
       jest.doMock(
-        '../../../src/api/middleware/fileUploadService',
+        '../../../src/middleware/fileUploadService',
         () => ({
           upload: {
             single: jest

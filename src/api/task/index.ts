@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { upload } from '../middleware/fileUploadService';
+import { upload } from '../../middleware/fileUploadService';
 import { Task, TaskStatus } from '../../database/models/taskModel';
 import { queueProcessingTask } from '../../services/excelProcessingService';
 import { ProcessedData } from '../../database/models/processDataModel';

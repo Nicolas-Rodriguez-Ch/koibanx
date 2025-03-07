@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { FileFilterCallback } from 'multer';
 
-import { fileFilter, storage } from '../../../src/api/middleware/fileUploadService';
+import { fileFilter, storage } from '../../src/middleware/fileUploadService';
 
 describe('File Upload Service', () => {
   describe('File Filter', () => {
